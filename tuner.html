@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dombyra Live — Онлайн Тюнер</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #5C3A21 0%, #D28A47 100%);
+            color: #fff;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 { font-size: 3rem; margin-bottom: 10px; letter-spacing: 2px; text-shadow: 0 3px 8px rgba(0,0,0,0.4);}        
+        .sub-title { font-size: 1.3rem; margin-bottom: 40px; opacity: 0.9; }
+        .tuner-box, .homework-box, .news-box {
+            background: rgba(255, 255, 255, 0.95);
+            border: 4px solid #8B4513;
+            border-radius: 25px;
+            padding: 40px;
+            width: 420px;
+            margin: 40px auto;
+            box-shadow: 0 0 25px rgba(0,0,0,0.4);
+        }
+        .tuner-display {
+            margin-top: 25px;
+            padding: 35px;
+            background: #f8f3ed;
+            border-radius: 20px;
+            border: 3px solid #8B4513;
+        }
+        #note { font-size: 4.8em; font-weight: bold; color: #8B4513; }
+        #freq { font-size: 1.8em; color: #444; }
+        .tuner-btn, .download-btn, .news-btn {
+            margin-top: 25px;
+            padding: 15px 35px;
+            background: #8B4513;
+            color: white;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .tuner-btn:hover, .download-btn:hover, .news-btn:hover { background: #5c2f0c; transform: scale(1.05);}    
+        .learn-btn { background:#8B4513; color:white; border:none; padding:15px 30px; border-radius: 12px; cursor:pointer; font-size:1.1em; font-weight:bold; transition:0.3s; }
+        .news-content {
+            margin-top: 15px;
+            text-align: left;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #f8f3ed;
+            color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #8B4513;
+        }
+    </style>
+</head>
+<body>
+    <div style="position: absolute; top: 20px; left: 20px;">
+        <button onclick="goHome()" class="learn-btn">🏠 Басты бет</button>
+    </div>
+
+    <!-- Kundelik батырмасы -->
+    <div style="position: absolute; top: 20px; right: 20px;">
+        <button onclick="window.open('https://kundelik.kz', '_blank')" class="learn-btn" style="background:#28a745; padding:10px 20px; font-size:1em;">
+            📚 Бағаларды көру — Kundelik.kz
+        </button>
+    </div>
+
+    <!-- Мұғаліммен байланысу батырмасы -->
+    <div style="position: absolute; top: 70px; right: 20px;">
+        <button onclick="window.location.href='mailto:teacher@example.com'" class="learn-btn" style="background:#0069d9; padding:10px 20px; font-size:1em;">
+            ✉️ Мұғаліммен байланысу
+        </button>
+        
+        <!-- Жаңалықтар терезесі -->
+        <div class="news-box news-content">
+            <h3 style="color:#8B4513; text-align:center;">📰 Алдағы жарыстар мен жаңалықтар</h3>
+            <ul>
+                <li>01.12 — Мектепішілік домбыра сайысы</li>
+                <li>10.12 — Облыстық онлайн концерт</li>
+                <li>15.12 — Қалааралық турнир</li>
+                <li>20.12 — Жаңа сабақ материалдары</li>
+            </ul>
+        </div>
+    </div>
+
+    <h1>Dombyra Live</h1>
+    <div class="sub-title">🎤 Кәсіби онлайн домбыра тюнері</div>
+
+    <!-- Тюнер Терезесі -->
+    <div class="tuner-box" style="border-image: url('dl-border.png') 30 round; border-width: 20px;">
+        <h2 style="color:#8B4513;">Онлайн Домбыра Тюнері</h2>
+        <p id="tuner-status" style="color:#444;">Микрофонға рұқсат беріңіз…</p>
+
+        <div class="tuner-display">
+            <div id="note">–</div>
+            <div id="freq">0 Hz</div>
+        </div>
+
+        <button onclick="startTuner()" class="tuner-btn">🎙 Тюнерді қосу</button>
+    </div>
+
+    <!-- Үй Тапсырмасы Терезесі -->
+    <div class="homework-box" style="border-image: url('dl-border.png') 30 round; border-width: 20px;">
+        <h2 style="color:#8B4513;">📘 Үй Тапсырмасы</h2>
+        <p style="color:#444; font-size:1.1em;">Мұғалім берген үй тапсырмасын осы жерден жүктей аласыз.</p>
+
+        <a href="uy_tapsyrma.pdf" download class="download-btn">📥 Үй тапсырмасын жүктеу</a>
+    </div>
+
+<script>
+function goHome(){ window.location.href = "dombyra.html"; }
+let audioContext, analyser, dataArray;
+function startTuner(){ navigator.mediaDevices.getUserMedia({audio:true})
+.then(stream=>{ document.getElementById("tuner-status").textContent="Тюнер жұмыс істеп тұр 🎵";
+ audioContext=new (window.AudioContext||window.webkitAudioContext)();
+ const source=audioContext.createMediaStreamSource(stream);
+ analyser=audioContext.createAnalyser(); analyser.fftSize=4096;
+ dataArray=new Float32Array(analyser.fftSize); source.connect(analyser);
+ detectPitch(); })
+.catch(()=>{ document.getElementById("tuner-status").textContent="❌ Микрофонға рұқсат берілмеді!"; }); }
+function detectPitch(){ analyser.getFloatTimeDomainData(dataArray);
+ const pitch=autoCorrelate(dataArray,audioContext.sampleRate);
+ if(pitch!==-1){ document.getElementById("freq").textContent=Math.round(pitch)+" Hz";
+ document.getElementById("note").textContent=getNoteFromFreq(pitch);} requestAnimationFrame(detectPitch);} 
+function autoCorrelate(buf,sampleRate){ let SIZE=buf.length; let MAX=Math.floor(SIZE/2);
+ let best=-1, bestCorr=0;
+ for(let o=1;o<MAX;o++){ let corr=0; for(let i=0;i<MAX;i++){ corr+=buf[i]*buf[i+o]; }
+ if(corr>bestCorr){ bestCorr=corr; best=o; }} return best>0? sampleRate/best:-1; }
+function getNoteFromFreq(freq){ const notes=["До","До#","Ре","Ре#","Ми","Фа","Фа#","Соль","Соль#","Ля","Ля#","Си"];
+ const A4=440; const n=12*(Math.log2(freq/A4))+69; const r=Math.round(n);
+ return notes[((r%12)+12)%12]; }
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домбыра Күйлер Порталы</title>
+    <button onclick="openTuner()" class="learn-btn" style="background:#8B4513;">
+🎤 Домбыра Тюнері
+</button>
+
+<script>
+function openTuner() {
+    window.open('tuner.html', '_blank'); // жаңа терезеде ашады
+}
+</script>
+
+   
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 0;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 3px solid #8B4513;
+        }
+        
+        h1 {
+            color: #8B4513;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            color: #8B4513;
+            font-size: 1.1em;
+        }
+        
+        .kui-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .kui-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .kui-card:hover {
+            transform: translateY(-10px);
+            border-color: #8B4513;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .kui-name {
+            color: #8B4513;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #f0e6d2;
+            padding-bottom: 15px;
+            text-align: center;
+        }
+        
+        .kui-composer {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        .kui-description {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 1em;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        
+        .kui-meta {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .audio-player {
+            width: 100%;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        
+        .audio-player::-webkit-media-controls-panel {
+            background: #8B4513;
+        }
+        
+        .audio-player::-webkit-media-controls-play-button {
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        .player-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        
+        .control-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .play-btn { 
+            background: #28a745; 
+            color: white; 
+        }
+        
+        .pause-btn { 
+            background: #ffc107; 
+            color: black; 
+        }
+        
+        .stop-btn { 
+            background: #dc3545; 
+            color: white; 
+        }
+        
+        .learn-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .learn-btn:hover {
+            background: linear-gradient(135deg, #218838, #1e9d7e);
+            transform: scale(1.05);
+        }
+        
+        .level-easy { 
+            color: #28a745; 
+            font-weight: bold;
+        }
+        
+        .level-medium { 
+            color: #ffc107; 
+            font-weight: bold;
+        }
+        
+        .level-hard { 
+            color: #dc3545; 
+            font-weight: bold;
+        }
+        
+        .duration {
+            color: #6c757d;
+            font-weight: bold;
+        }
+        
+        .composer-badge {
+            background: #8B4513;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .now-playing {
+            background: #e8f5e8;
+            border: 2px solid #28a745;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            color: #155724;
+            display: none;
+        }
+       
+
+
+    </style>
+
+
+<body>
+    <!-- Нота суретін көрсету модалы -->
+<div id="notesModal" style="
+    display:none; 
+    position: fixed; 
+    top:0; left:0; 
+    width:100%; height:100%; 
+    background: rgba(0,0,0,0.7); 
+    justify-content:center; 
+    align-items:center;
+    z-index: 9999;
+">
+    <div style="
+        background:white; 
+        padding:20px; 
+        border-radius:10px; 
+        max-width:90%; 
+        max-height:90%; 
+        overflow:auto;
+        position: relative;
+    ">
+        <!-- Жабу батырмасы -->
+        <button onclick="closeNotes()" style="
+            position:absolute;
+            right:10px;
+            top:10px;
+            background:#8B4513;
+            color:white;
+            border:none;
+            padding:8px 15px;
+            border-radius:6px;
+            cursor:pointer;
+            font-size:14px;
+        ">X</button>
+
+        <img id="notesImage" src="" style="
+            width:100%; 
+            height:auto; 
+            margin-top:40px;
+            border-radius:10px;
+        ">
+        <iframe id="videoFrame" width="100%" height="420" 
+        style="display:none; margin-top:20px; border-radius:10px;" 
+        frameborder="0" allow="autoplay; fullscreen">
+</iframe>
+
+    </div>
+</div>
+
+
+</body>
+
+
+
+
+
+
+
+
+
+    <div class="container">
+        <header>
+            <h1>🎵 Dombyra Live </h1>
+            <p> <i>Мелибаева Шохсина Буранбайқызы</i></p>
+            <h2><i><p class="subtitle">10 атақты күйді тыңдау және үйрену</p></i></h2>
+            <div class="stats">
+                <span>🎼 10 күй</span>
+                <span>🔊 Аудио қосылған</span>
+                <span>👨‍🏫  әйгілі композиторлар </span>
+            </div>
+        </header>
+
+        <div class="now-playing" id="nowPlaying">
+            🎵 Қазір ойнап жатыр: <span id="currentTrack">-</span>
+        </div>
+
+        <div class="kui-grid" id="kuiGrid">
+            <!-- Күйлер JavaScript арқылы қосылады -->
+        </div>
+    </div>
+ 
+
+
+    <script>
+        // Күйлер деректері - аудио файлдарыңыздың жолдарын осы жерге қойыңыз
+        const kuiData = [
+            {
+                id: 1,
+                name: "Адай",
+                composer: "Құрманғазы",
+                description: "Даңқты тарихи күй. Қазақ елінің ерлігін, батырлығын баяндайды.",
+                audioFile: "https://muzgar.kz/uploads/files/2025-03/rmanazy-sayrbaily_-_adai-ki.mp3  ", // Өз аудио файлыңыздың жолын қойыңыз
+                notesFile:"images/2025-11-24_16-30-06.png",
+                VideoFile:"https://youtu.be/uoewkbjYXro",
+                duration: "1:58",
+                level: "Орташа"
+            },
+            {
+                id: 2,
+                name: "Еркесылқым",
+                composer: "Ықылас",
+                description: "Сүйіспеншілік тақырыбына арналған лирикалық күй.",
+                audioFile: "https://muzgar.kz/uploads/files/2025-03/rmanazy-sayrbaily_-_erke-sylym-ki.mp3", // Өз аудио файлыңыздың жолын қойыңыз
+                duration: "2:32",
+                level: "Оңай"
+            },
+            {
+                id: 3,
+                name: "Келіншек",
+                composer: "Халық күйі",
+                description: "Тартыс тақырыбындағы күй. Жеңістің шаттығын білдіреді.",
+                audioFile: "https://muzgar.kz/uploads/files/2025-03/haly-kiikelinshek-ki_-_.mp3", // Өз аудио файлыңыздың жолын қойыңыз
+                duration: "1:22",
+                level: "Орташа"
+            },
+            {
+                id: 4,
+                name: "Ақсақ киік күйі",
+                composer: "Кұрманғазы",
+                description: "Табиғат күйі.",
+                audioFile: "https://muzgar.kz/uploads/files/2025-03/rmanazy-sayrbaily_-_asak-kiik-ki.mp3", // Өз аудио файлыңыздың жолын қойыңыз
+                duration: "1:24",
+                level: "Орташа"
+            },
+            {
+                id: 5,
+                name: "Жигер",
+                composer: "Дәулеткерей",
+                description: "Ер жігіттердің жауынгерлік рухын көрсететін күй.",
+                audioFile: "https://muzgar.kz/uploads/files/2025-03/ali-jantileuov_-_jiger-duletkerei-ki.mp3 ",
+                duration: "5:17",
+                level: "Орташа"
+            },
+            {
+                id: 6,
+                name: "Көкейкесті",
+                composer: "Дәулеткерей",
+                description: "Қайғы-қасірет тақырыбындағы терең философиялық күй.",
+                audioFile: "https://muzgar.kz/uploads/files/2025-03/biken-hasenov_-_kkeikesti-ki.mp3", // Өз аудио файлыңыздың жолын қойыңыз
+                duration: "2:40",
+                level: "Күрделі"
+            },
+            {
+                id: 7,
+                name: "Сарыарқа",
+                composer: "Нұргиса Тлендиев",
+                description: "Қазақ даласының кеңдігін суреттейді.",
+                audioFile: "", // Өз аудио файлыңыздың жолын қойыңыз
+                duration: "4:05",
+                level: "Орташа"
+            },
+            {
+                id: 8,
+                name: "Балбырауын",
+                composer: "Құрманғазы",
+                description: "Ылғилық пен серпінділік туралы күй.",
+                audioFile: "https://muzgar.kz/uploads/files/2025-03/rmanazy-sayrbaily_-_balbyrauyn-ki.mp3", // Өз аудио файлыңыздың жолын қойыңыз
+                notesFile: "images/Balbirauin.png",
+                duration: "1:29",
+                level: "күрделі"
+            },
+            {
+                id: 9,
+                name: "Толғау (күй)",
+                composer: "Қаршыға Ахмедияров",
+                description: "Халық зар мұңын толғау.",
+                audioFile: "https://muzgar.kz/uploads/files/2025-03/arshya-ahmediyarov_-_mrat-tolau-ki.mp3", // Өз аудио файлыңыздың жолын қойыңыз
+                
+                duration: "4:00",
+                level: "Орташа"
+            },
+            {
+                id: 10,
+                name: "Бестөре (күй)",
+                composer: "Тәттімбет Қазанғапұлы",
+                description: "Атақты би күйі. Жорға ат мінін суреттейді.",
+                audioFile: "https://muzgar.kz/uploads/files/2025-03/tttimbet-azanaply_-_bestre-ki.mp3", // Өз аудио файлыңыздың жолын қойыңыз
+                duration: "3:07",
+                level: "Оңай"
+            }
+        ];
+
+
+        let currentAudio = null;
+        let currentKuiId = null;
+
+        // Күйлер тізімін көрсету
+        function displayKuiList() {
+            const grid = document.getElementById('kuiGrid');
+            grid.innerHTML = '';
+
+            kuiData.forEach(kui => {
+                const levelClass = kui.level === 'Оңай' ? 'level-easy' : 
+                                 kui.level === 'Орташа' ? 'level-medium' : 'level-hard';
+                
+                const card = document.createElement('div');
+                card.className = 'kui-card';
+                card.innerHTML = `
+                    <div class="kui-name">${kui.name}</div>
+                    <div class="kui-composer">
+                        <span class="composer-badge">${kui.composer}</span>
+                    </div>
+                    <div class="kui-description">${kui.description}</div>
+                    
+                    <div class="kui-meta">
+                        <span class="duration">⏱️ ${kui.duration}</span>
+                        <span class="${levelClass}">📊 ${kui.level}</span>
+                    </div>
+                    
+                    <audio class="audio-player" id="audio-${kui.id}" controls>
+                        <source src="${kui.audioFile}" type="audio/mpeg">
+                        Сіздің браузеріңіз аудио элементін қолдамайды.
+                    </audio>
+                    
+                    <div class="player-controls">
+                        <button class="control-btn play-btn" onclick="playKui(${kui.id})">▶ Ойнау</button>
+                        <button class="control-btn pause-btn" onclick="pauseKui(${kui.id})">⏸️ Тоқтату</button>
+                        <button class="control-btn stop-btn" onclick="stopKui(${kui.id})">⏹ Аяқтау</button>
+                    </div>
+                    
+                    <button class="learn-btn" onclick="learnKui(${kui.id})">
+                        🎵 Ноталарды үйрену
+                    </button>
+                    <button class="learn-btn" style="background:#0069d9;" onclick="learnVideo(${kui.id})">
+    🎬 Видеосабақ
+</button>
+<div style="
+    margin-top: 15px;
+    text-align: center;
+">
+    <a href="mysheet.pdf" download 
+       style="
+           background:#8B4513;
+           color:white;
+           padding:12px 25px;
+           border-radius:10px;
+           text-decoration:none;
+           font-size:1.1em;
+           display:inline-block;
+           transition:0.3s;
+       "
+       onmouseover="this.style.background='#5c2f0c'"
+       onmouseout="this.style.background='#8B4513'">
+        📥 Файлды жүктеу
+    </a>
+</div>
+
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Күйді ойнату
+        // Күйді ойнату
+function playKui(kuiId) {
+    if (currentAudio && currentAudio.id !== `audio-${kuiId}`) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+
+    const audioElement = document.getElementById(`audio-${kuiId}`);
+    currentAudio = audioElement;
+    currentKuiId = kuiId;
+
+    const kui = kuiData.find(k => k.id === kuiId);
+    document.getElementById('currentTrack').textContent = `${kui.name} - ${kui.composer}`;
+    document.getElementById('nowPlaying').style.display = 'block';
+
+    audioElement.play();
+}
+
+// Күйді тоқтату
+function pauseKui(kuiId) {
+    const audioElement = document.getElementById(`audio-${kuiId}`);
+    audioElement.pause();
+}
+
+// Күйді аяқтау
+function stopKui(kuiId) {
+    const audioElement = document.getElementById(`audio-${kuiId}`);
+    audioElement.pause();
+    audioElement.currentTime = 0;
+    document.getElementById('nowPlaying').style.display = 'none';
+}
+
+
+
+// ✅ ДҰРЫС learnKui ФУНКЦИЯСЫ
+function learnKui(kuiId) {
+    const kui = kuiData.find(k => k.id === kuiId);
+
+    if (!kui.notesFile) {
+        alert("Бұл күйге нота қосылмаған!");
+        return;
+    }
+
+    document.getElementById("notesImage").src = kui.notesFile;
+    document.getElementById("notesModal").style.display = "flex";
+}
+function learnVideo(kuiId) {
+    const kui = kuiData.find(k => k.id === kuiId);
+    const videoEl = document.getElementById("videoFrame");
+    const imgEl = document.getElementById("notesImage");
+
+    // Нота суретін жасырамыз
+    imgEl.style.display = "none";
+
+    if (!kui.videoFile) {
+        alert("Бұл күйге видеосабақ қосылмаған!");
+        return;
+    }
+
+    videoEl.src = kui.videoFile + "?autoplay=1";
+    videoEl.style.display = "block";
+
+    document.getElementById("notesModal").style.display = "flex";
+}
+
+
+// Аудио аяқталғанда
+document.addEventListener('DOMContentLoaded', function() {
+    kuiData.forEach(kui => {
+        const audioElement = document.getElementById(`audio-${kui.id}`);
+        if (audioElement) {
+            audioElement.addEventListener('ended', function() {
+                document.getElementById('nowPlaying').style.display = 'none';
+            });
+        }
+    });
+});
+
+// Басында күй тізімін шығару
+displayKuiList();
+function showNotes(imgPath) {
+    document.getElementById("notesImage").src = imgPath;
+    document.getElementById("notesModal").style.display = "flex";
+}
+
+function closeNotes() {
+    document.getElementById("notesModal").style.display = "none";
+
+    // Видео тоқтау үшін src-ты өшіреміз
+    document.getElementById("videoFrame").src = "";
+}
+
+  
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
